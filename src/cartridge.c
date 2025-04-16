@@ -1,6 +1,5 @@
 #include "cartridge.h"
 
-
 bool cartridge_load(Cartridge *cartridge, const char *path) {
     FILE *f = fopen(path, "r");
     if (!f) {
@@ -13,7 +12,7 @@ bool cartridge_load(Cartridge *cartridge, const char *path) {
     cartridge->rom_size = ftell(f);
     rewind(f);
 
-    memset(cartridge->rom, 0xFF, CARTRIDGE_ROM_SIZE);  // default fill
+    memset(cartridge->rom, 0xFF, CARTRIDGE_ROM_SIZE);
     size_t read = fread(cartridge->rom, 1, CARTRIDGE_ROM_SIZE, f);
     fclose(f);
 
@@ -59,11 +58,12 @@ void cartridge_print_data(Cartridge cartridge) {
     printf("\n");
 
     // 0x21B0 (12 bytes)
-    char title[13]; // 12 + 1 for the null terminator
+    char title[13];                     // 12 + 1 for the null terminator
     for (int i = 0; i < 12; i++) {
         title[i] = cartridge_read(cartridge, 0x21B0 + i);
     }
-    title[12] = '\0'; // null terminator
+    title[12] = '\0';                  // null terminator
     printf("Game title: %s\n", title);
+
     printf("ROM size: %dKB\n", cartridge.rom_size / 1024);
 }
