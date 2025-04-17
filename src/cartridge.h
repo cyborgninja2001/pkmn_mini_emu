@@ -15,6 +15,7 @@ typedef struct {
 
 bool cartridge_load(Cartridge *cartridge, const char *path);
 uint8_t cartridge_read(Cartridge cartridge, uint32_t address);
+void cartridge_write(Cartridge *cartridge, uint32_t address, uint8_t value);
 void cartridge_print_data(Cartridge cartridge);
 
 #endif

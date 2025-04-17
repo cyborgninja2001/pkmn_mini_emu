@@ -13,6 +13,6 @@ typedef struct {
 
 void bus_init(Bus* bus, Cartridge cartridge);
 uint8_t bus_read(Bus bus, uint32_t address);
-void bus_write(Bus *bus, uint32_t address, uint8_t value);
+void bus_write(Bus bus, uint32_t address, uint8_t value);
 
 #endif
