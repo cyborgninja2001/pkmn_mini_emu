@@ -26,12 +26,12 @@ uint8_t cartridge_read(Cartridge cartridge, uint32_t address) {
         printf("*ERROR: cartridge_read(%06X)*\n", address);
         exit(-1);
     } else {
-        return cartridge.rom[address];
+        return cartridge.rom[address - 0x002100];
     }
 }
 
 void cartridge_write(Cartridge *cartridge, uint32_t address, uint8_t value) {
-    cartridge->rom[address] = value;
+    cartridge->rom[address - 0x002100] = value;
 }
 
 void cartridge_print_data(Cartridge cartridge) {
