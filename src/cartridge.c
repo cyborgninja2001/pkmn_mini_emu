@@ -1,7 +1,7 @@
 #include "cartridge.h"
 
 bool cartridge_load(Cartridge *cartridge, const char *path) {
-    FILE *f = fopen(path, "r");
+    FILE *f = fopen(path, "rb");
     if (!f) {
         printf("Could not open the file: %s\n", path);
         return false;

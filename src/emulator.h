@@ -4,6 +4,7 @@
 #include "common.h"
 #include "pokemon_mini.h"
 #include "cartridge.h"
+#include "bios.h"
 
 typedef struct {
     PokemonMini pkmini;

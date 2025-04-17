@@ -1,1 +1,1 @@
-gcc src/main.c src/cartridge.c src/bus.c src/pokemon_mini.c src/ram.c -o main -lSDL2 -lSDL2_ttf
+gcc src/main.c src/cartridge.c src/bus.c src/pokemon_mini.c src/ram.c src/cpu.c src/bios.c src/emulator.c -o main -lSDL2 -lSDL2_ttf
