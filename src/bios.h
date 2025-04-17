@@ -8,6 +8,6 @@ typedef struct {
 } BIOS;
 
 void init_bios(BIOS *bios, const char *path);
-uint8_t bios_read(BIOS *bios, uint16_t addr);
+uint8_t bios_read(BIOS bios, uint16_t address);
 
 #endif

@@ -18,3 +18,7 @@ void init_bios(BIOS *bios, const char *path) {
     printf("BIOS opened successfully!\n");
     fclose(f);
 }
+
+uint8_t bios_read(BIOS bios, uint16_t address) {
+    return bios.data[address];
+}
