@@ -23,7 +23,7 @@ bool cartridge_load(Cartridge *cartridge, const char *path) {
 uint8_t cartridge_read(Cartridge cartridge, uint32_t address) {
     if ((address < CARTRIDGE_ROM_START) || (address > CARTRIDGE_ROM_END)) {
         return 0xFF;
-        printf("*ERROR: cartridge_read(%02X)*\n", address);
+        printf("*ERROR: cartridge_read(%06X)*\n", address);
         exit(-1);
     } else {
         return cartridge.rom[address];

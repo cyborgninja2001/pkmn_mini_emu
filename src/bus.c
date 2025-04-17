@@ -1,8 +1,8 @@
 #include "bus.h"
 
 void bus_init(Bus* bus, Cartridge *cartridge, Ram *ram) {
-    bus->cartridge = &cartridge;
-    bus->ram = &ram;
+    bus->cartridge = cartridge;
+    bus->ram = ram;
 }
 
 uint8_t bus_read(Bus bus, uint32_t address) {

@@ -11,7 +11,7 @@ typedef struct {
     Ram *ram;
 } Bus;
 
-void bus_init(Bus* bus, Cartridge cartridge);
+void bus_init(Bus* bus, Cartridge *cartridge, Ram *ram);
 uint8_t bus_read(Bus bus, uint32_t address);
 void bus_write(Bus bus, uint32_t address, uint8_t value);
 
