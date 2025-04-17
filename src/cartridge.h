@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#define CARTRIDGE_ROM_SIZE (2 * 1024 * 1024) // 2MB
+#define CARTRIDGE_ROM_SIZE 0x1FDF00 // 2MB
 #define CARTRIDGE_ROM_START 0x000000
 #define CARTRIDGE_ROM_END 0x1FFFFF
 
