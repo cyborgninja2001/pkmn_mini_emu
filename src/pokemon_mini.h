@@ -3,9 +3,11 @@
 
 #include "common.h"
 #include "cartridge.h"
+#include "ram.h"
 
 typedef struct {
-    Cartridge cartridge;
+    //Cartridge cartridge;
+    Ram ram;
 } PokemonMini;
 
 void pokemon_mini_init();
