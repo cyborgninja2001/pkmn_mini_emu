@@ -114,6 +114,8 @@ void cpu_reset(Cpu *cpu) {
     cpu->registers.Xi = 0x00;
     cpu->registers.Y = 0x0000;
     cpu->registers.Yi = 0x00;
+
+    cpu->current_opcode = 0xFF;
 }
 
 void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
@@ -123,6 +125,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
     } else {
         opcode = bus_read(bus, cpu->registers.PC);
     }
+    cpu->current_opcode = opcode;
     //emu_cycles(&emu, 4); *i think it's no necessary here*
     cpu->registers.PC++;
 
@@ -141,6 +144,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
         case 0x42: // MOV A L
             cpu->registers.A = cpu->registers.L;
             emu_cycles(&emu, 4);
+            break;
         case 0x43: // MOV A, H
             cpu->registers.A = cpu->registers.H;
             emu_cycles(&emu, 4);
@@ -288,7 +292,8 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
         case 0x64: { // MOV [X], [N+#nn]
             uint8_t nn = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
-            bus_write(bus, cpu->registers.X, cpu->registers.N + nn);
+            uint8_t value = bus_read(bus, cpu->registers.N + nn);
+            bus_write(bus, cpu->registers.X, value);
             emu_cycles(&emu, 16);
             break;
         }
@@ -1415,4 +1420,23 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
     }
 }
 
-void cpu_debug(Cpu cpu) {}
+void cpu_debug(Cpu cpu) {
+    printf("CURRENT OP: %02X\n", cpu.current_opcode);
+    printf("REGISTERS:\n");
+    printf("        PC:%04X\n", cpu.registers.PC);
+    printf("        V:%02X\n", cpu.registers.V);
+    printf("        U:%02X\n", cpu.registers.U);
+    printf("        A:%02X\n", cpu.registers.A);
+    printf("        B:%02X\n", cpu.registers.B);
+    printf("        H:%02X\n", cpu.registers.H);
+    printf("        L:%02X\n", cpu.registers.L);
+    printf("        X:%04X\n", cpu.registers.X);
+    printf("        Xi:%02X\n", cpu.registers.Xi);
+    printf("        Y:%04X\n", cpu.registers.Y);
+    printf("        Yi:%02X\n",cpu.registers.Yi);
+    printf("        N:%02X\n", cpu.registers.N);
+    printf("        I:%02X\n", cpu.registers.I);
+    printf("        E:%02X\n", cpu.registers.E);
+    printf("        F:%02X\n", cpu.registers.F);
+    printf("        SP:%02X\n", cpu.registers.SP);
+}

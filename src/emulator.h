@@ -12,6 +12,8 @@ typedef struct {
     int emu_ticks;
 } Emulator;
 
+void emu_init(Emulator *emu);
 void emu_cycles(Emulator *emulator, int n);
+void emu_run(Emulator *emu, int argc, char* argv[]);
 
 #endif

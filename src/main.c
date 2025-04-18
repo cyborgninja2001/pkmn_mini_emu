@@ -1,6 +1,7 @@
 #include "cartridge.h"
 #include "bus.h"
 #include "bios.h"
+#include "cpu.h"
 #include "common.h"
 #include <stdio.h>
 
@@ -8,10 +9,21 @@ BIOS bios;
 Bus bus;
 Cartridge cart;
 Ram ram;
+Cpu cpu;
+Emulator emu;
+Cartridge cart;
+
 int main(int argc, char* argv[]) {
-    init_bios(&bios, argv[1]);
+    init_bios(&bios, "");
     bus_init(&bus, &cart, &ram, &bios);
-    uint8_t a = bus_read(bus, 0x0000FF);
-    printf("a: %02X\n", a);
+    cpu_reset(&cpu);
+
+    cartridge_load(&cart, argv[1]);
+    cartridge_print_data(cart);
+
+    while(true) {
+        cpu_step(&cpu, bus, emu);
+        cpu_debug(cpu);
+    }
     return 0;
 }

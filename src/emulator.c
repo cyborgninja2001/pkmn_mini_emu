@@ -11,6 +11,8 @@ void emu_cycles(Emulator *emulator, int n) {
     }
 }
 
+void emu_run(Emulator *emu, int argc, char* argv[]) {}
+
 /*
 void timer_tick() {
     // por ejemplo, cada 64 ciclos aumenta un contador

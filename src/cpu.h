@@ -32,6 +32,7 @@ typedef struct {
 
 typedef struct {
     Registers registers;
+    uint8_t current_opcode;
 } Cpu;
 
 // functions to get the 16 bit register pairs
