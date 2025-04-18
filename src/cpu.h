@@ -2,6 +2,10 @@
 #define CPU_H
 
 #include "common.h"
+#include "bus.h"
+#include "emulator.h"
+
+// 4 MHz -> that means 4,000,000 cycles per second.
 
 typedef struct {
     uint8_t A;
@@ -26,16 +30,42 @@ typedef struct {
     uint8_t E;
 } Registers;
 
+typedef struct {
+    Registers registers;
+} Cpu;
+
+// functions to get the 16 bit register pairs
+uint16_t reg_BA(Cpu cpu);
+uint16_t reg_HL(Cpu cpu);
+uint32_t reg_XiX(Cpu cpu);
+uint32_t reg_YiY(Cpu cpu);
+uint32_t reg_VPC(Cpu cpu);
+
+void set_BA(Cpu *cpu, uint16_t value);
+void set_HL(Cpu *cpu, uint16_t value);
+
+// access the flags
+bool get_flag_Z(Cpu cpu);      // 0 Zero
+bool get_flag_C(Cpu cpu);      // 1 Carry
+bool get_flag_O(Cpu cpu);      // 2 Overflow
+bool get_flag_S(Cpu cpu);      // 3 Sign
+bool get_flag_BCD(Cpu cpu);    // 4 Binary Coded Decimal Mode (8-bit add\sub)
+bool get_flag_NIBBLE(Cpu cpu); // 5 Low-Mask Mode (8-bit add\sub)
+bool get_flag_ID(Cpu cpu);     // 6 Interrupt Disable
+bool get_flag_IB(Cpu cpu);     // 7 Interrupt Branch
+
+// set the flags
+void set_flag_Z(Cpu *cpu, bool v);
+void set_flag_C(Cpu *cpu, bool v);
+void set_flag_O(Cpu *cpu, bool v);
+void set_flag_S(Cpu *cpu, bool v);
+void set_flag_BCD(Cpu *cpu, bool v);
+void set_flag_NIBBLE(Cpu *cpu, bool v);
+void set_flag_ID(Cpu *cpu, bool v);
+void set_flag_IB(Cpu *cpu, bool v);
+
+void cpu_reset(Cpu *cpu);
+void cpu_step(Cpu *cpu, Bus bus, Emulator emu);
+void cpu_debug(Cpu cpu);
+
 #endif
-
-// uint32_t direccion_x = ((uint32_t)Xi << 16) | X;
-
-/*
-uint32_t direccion_pc;
-
-if (PC & 0x8000) { // Verificar si el bit mas significativo de PC esta establecido (bit 15)
-    direccion_pc = ((uint32_t)V << 16) | PC;
-} else {
-    direccion_pc = PC; // Si el bit mas significativo no esta establecido, la direccion es simplemente el valor de PC
-}
-*/

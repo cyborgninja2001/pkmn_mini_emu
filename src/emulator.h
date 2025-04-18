@@ -12,6 +12,6 @@ typedef struct {
     int emu_ticks;
 } Emulator;
 
-void emu_cycle(Emulator *emulator, int n);
+void emu_cycles(Emulator *emulator, int n);
 
 #endif

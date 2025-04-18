@@ -1,6 +1,6 @@
 #include "emulator.h"
 
-void emu_cycle(Emulator *emulator, int n) {
+void emu_cycles(Emulator *emulator, int n) {
     for (int i = 0; i < n; i++) {
         // avanzar todos los componentes del sistema 1 ciclo
         //timer_tick();     // avanzas timers
