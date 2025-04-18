@@ -16,5 +16,7 @@ typedef struct {
 void bus_init(Bus* bus, Cartridge *cartridge, Ram *ram, BIOS *bios);
 uint8_t bus_read(Bus bus, uint32_t address);
 void bus_write(Bus bus, uint32_t address, uint8_t value);
+uint16_t bus_read16(Bus bus, uint32_t address);
+void bus_write16(Bus bus, uint32_t address, uint16_t value);
 
 #endif

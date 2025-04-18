@@ -45,3 +45,17 @@ void bus_write(Bus bus, uint32_t address, uint8_t value) {
         exit(-1);
     }
 }
+
+uint16_t bus_read16(Bus bus, uint32_t address) {
+    uint8_t low  = bus_read(bus, address);
+    uint8_t high = bus_read(bus, address + 1);
+    return ((uint16_t)high << 8) | low;
+}
+
+void bus_write16(Bus bus, uint32_t address, uint16_t value) {
+    uint8_t low  = value & 0xFF;
+    uint8_t high = (value >> 8) & 0xFF;
+
+    bus_write(bus, address, low);
+    bus_write(bus, address + 1, high);
+}

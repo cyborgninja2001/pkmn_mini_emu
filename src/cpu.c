@@ -834,6 +834,134 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
                     emu_cycles(&emu, 20);
                     break;
                 }
+                case 0xC0: // MOV A, N
+                    cpu->registers.A = cpu->registers.N;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xC1: // MOV A, F
+                    cpu->registers.A = cpu->registers.F;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xC8: // MOV A, V
+                    cpu->registers.A = cpu->registers.V;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xC9: // MOV A, I
+                    cpu->registers.A = cpu->registers.I;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xCA: // MOV A, XI
+                    cpu->registers.A = cpu->registers.Xi;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xCB: // MOV A, YI
+                    cpu->registers.A = cpu->registers.Yi;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xC2: // MOV N, A
+                    cpu->registers.N = cpu->registers.A;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xC3: // MOV F, A
+                    cpu->registers.F = cpu->registers.A;
+                    emu_cycles(&emu, 12);
+                    break;
+                case 0xCC: // MOV U, A
+                    cpu->registers.U = cpu->registers.A;
+                    emu_cycles(&emu, 12);
+                    break;
+                case 0xCD: // MOV I, A
+                    cpu->registers.I = cpu->registers.A;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xCE: // MOV XI, A
+                    cpu->registers.Xi = cpu->registers.A;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xCF: // MOV YI, A
+                    cpu->registers.Yi = cpu->registers.A;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xD0: { // MOV A, [#nnnn]
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    cpu->registers.A = bus_read(bus, nnnn);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD1: { // MOV B, [#nnnn]
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    cpu->registers.B = bus_read(bus, nnnn);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD2: { // MOV L, [#nnnn]
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    cpu->registers.L = bus_read(bus, nnnn);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD3: { // MOV H, [#nnnn]
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    cpu->registers.H = bus_read(bus, nnnn);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD4: { // MOV [#nnnn], A
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    bus_write(bus, nnnn, cpu->registers.A);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD5: { // MOV [#nnnn], B
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    bus_write(bus, nnnn, cpu->registers.B);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD6: { // MOV [#nnnn], L
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    bus_write(bus, nnnn, cpu->registers.L);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD7: { // MOV [#nnnn], H
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    bus_write(bus, nnnn, cpu->registers.H);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
                 default:
                     printf("CE NOT FOUND!\n");
                     break;
@@ -845,7 +973,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
             uint8_t nn2 = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
             uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-            uint8_t value = bus_read(bus, nnnn);
+            uint16_t value = bus_read16(bus, nnnn);
             set_BA(cpu, value);
             emu_cycles(&emu, 20);
             break;
@@ -856,7 +984,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
             uint8_t nn2 = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
             uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-            uint8_t value = bus_read(bus, nnnn);
+            uint16_t value = bus_read16(bus, nnnn);
             set_HL(cpu, value);
             emu_cycles(&emu, 20);
             break;
@@ -867,7 +995,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
             uint8_t nn2 = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
             uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-            cpu->registers.X = bus_read(bus, nnnn);
+            cpu->registers.X = bus_read16(bus, nnnn);
             emu_cycles(&emu, 20);
             break;
         }
@@ -877,7 +1005,7 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
             uint8_t nn2 = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
             uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-            cpu->registers.Y = bus_read(bus, nnnn);
+            cpu->registers.Y = bus_read16(bus, nnnn);
             emu_cycles(&emu, 20);
             break;
         }
@@ -891,10 +1019,317 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
                     uint8_t nn2 = bus_read(bus, cpu->registers.PC);
                     cpu->registers.PC++;
                     uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-                    cpu->registers.SP = bus_read(bus, nnnn);
+                    cpu->registers.SP = bus_read16(bus, nnnn);
                     emu_cycles(&emu, 24);
                     break;
                 }
+                case 0x7C: { // MOV [#nnnn], SP
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    bus_write16(bus, nnnn, cpu->registers.SP);
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x6E: { // MOV SP, #nnnn
+                    uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+                    cpu->registers.SP = nnnn;
+                    emu_cycles(&emu, 16);
+                    break;
+                }
+                case 0x70: { // MOV BA, [SP+#ss]
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t value = bus_read16(bus, cpu->registers.SP + ss);
+                    set_BA(cpu, value);
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x71: { // MOV HL, [SP+#ss]
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t value = bus_read16(bus, cpu->registers.SP + ss);
+                    set_HL(cpu, value);
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x72: { // MOV X, [SP+#ss]
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t value = bus_read16(bus, cpu->registers.SP + ss);
+                    cpu->registers.X = value;
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x73: { // MOV Y, [SP+#ss]
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    uint16_t value = bus_read16(bus, cpu->registers.SP + ss);
+                    cpu->registers.Y = value;
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x74: { // MOV [SP+#ss], BA
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    bus_write16(bus, cpu->registers.SP + ss, reg_BA(*cpu));
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x75: { // MOV [SP+#ss], HL
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    bus_write16(bus, cpu->registers.SP + ss, reg_HL(*cpu));
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x76: { // MOV [SP+#ss], X
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    bus_write16(bus, cpu->registers.SP + ss, cpu->registers.X);
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0x77: { // MOV [SP+#ss], Y
+                    int8_t ss = (int8_t)bus_read(bus, cpu->registers.PC);
+                    cpu->registers.PC++;
+                    bus_write16(bus, cpu->registers.SP + ss, cpu->registers.Y);
+                    emu_cycles(&emu, 24);
+                    break;
+                }
+                case 0xC0: { // MOV BA, [HL]
+                    uint16_t value = bus_read16(bus, reg_HL(*cpu));
+                    set_BA(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xC1: { // MOV HL, [HL]
+                    uint16_t value = bus_read16(bus, reg_HL(*cpu));
+                    set_HL(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xC2: { // MOV X, [HL]
+                    uint16_t value = bus_read16(bus, reg_HL(*cpu));
+                    cpu->registers.X = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xC3: { // MOV Y, [HL]
+                    uint16_t value = bus_read16(bus, reg_HL(*cpu));
+                    cpu->registers.Y = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD0: { // MOV BA, [X]
+                    uint16_t value = bus_read16(bus, cpu->registers.X);
+                    set_BA(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD1: { // MOV HL, [X]
+                    uint16_t value = bus_read16(bus, cpu->registers.X);
+                    set_HL(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD2: { // MOV X, [X]
+                    uint16_t value = bus_read16(bus, cpu->registers.X);
+                    cpu->registers.X = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD3: { // MOV Y, [X]
+                    uint16_t value = bus_read16(bus, cpu->registers.X);
+                    cpu->registers.Y = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD8: { // MOV BA, [Y]
+                    uint16_t value = bus_read16(bus, cpu->registers.Y);
+                    set_BA(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xD9: { // MOV HL, [Y]
+                    uint16_t value = bus_read16(bus, cpu->registers.Y);
+                    set_HL(cpu, value);
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xDA: { // MOV X, [Y]
+                    uint16_t value = bus_read16(bus, cpu->registers.Y);
+                    cpu->registers.X = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xDB: { // MOV Y, [Y]
+                    uint16_t value = bus_read16(bus, cpu->registers.Y);
+                    cpu->registers.Y = value;
+                    emu_cycles(&emu, 20);
+                    break;
+                }
+                case 0xC4: // MOV [HL], BA
+                    bus_write16(bus, reg_HL(*cpu), reg_BA(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xC5: // MOV [HL], HL
+                    bus_write16(bus, reg_HL(*cpu), reg_HL(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xC6: // MOV [HL], X
+                    bus_write16(bus, reg_HL(*cpu), cpu->registers.X);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xC7: // MOV [HL], Y
+                    bus_write16(bus, reg_HL(*cpu), cpu->registers.Y);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xD4: // MOV [X], BA
+                    bus_write16(bus, cpu->registers.X, reg_BA(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xD5: // MOV [X], HL
+                    bus_write16(bus, cpu->registers.X, reg_HL(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xD6: // MOV [X], X
+                    bus_write16(bus, cpu->registers.X, cpu->registers.X);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xD7: // MOV [X], Y
+                    bus_write16(bus, cpu->registers.X, cpu->registers.Y);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xDC: //MOV [Y], BA
+                    bus_write16(bus, cpu->registers.Y, reg_BA(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xDD: // MOV [Y], HL
+                    bus_write16(bus, cpu->registers.Y, reg_HL(*cpu));
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xDE: // MOV [Y], X
+                    bus_write16(bus, cpu->registers.Y, cpu->registers.X);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xDF: // MOV [Y], Y
+                    bus_write16(bus, cpu->registers.Y, cpu->registers.Y);
+                    emu_cycles(&emu, 20);
+                    break;
+                case 0xE0: // MOV BA, BA
+                    set_BA(cpu, reg_BA(*cpu));
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE1: // MOV BA, HL
+                    set_BA(cpu, reg_HL(*cpu));
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE2: // MOV BA, X
+                    set_BA(cpu, cpu->registers.X);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE3: // MOV BA, Y
+                    set_BA(cpu, cpu->registers.Y);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE4: // MOV HL, BA
+                    set_HL(cpu, reg_BA(*cpu));
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE5: // MOV HL, HL
+                    set_HL(cpu, reg_HL(*cpu));
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE6: // MOV HL, X
+                    set_HL(cpu, cpu->registers.X);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE7: // MOV HL, Y
+                    set_HL(cpu, cpu->registers.Y);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE8: // MOV X, BA
+                    cpu->registers.X = reg_BA(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xE9: // MOV X, HL
+                    cpu->registers.X = reg_HL(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xEA: // MOV X, X
+                    cpu->registers.X = cpu->registers.X;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xEB: // MOV X, Y
+                    cpu->registers.X = cpu->registers.Y;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xEC: // MOV Y, BA
+                    cpu->registers.Y = reg_BA(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xED: // MOV Y, HL
+                    cpu->registers.Y = reg_HL(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xEE: // MOV Y, X
+                    cpu->registers.Y = cpu->registers.X;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xEF: // MOV Y, Y
+                    cpu->registers.Y = cpu->registers.Y;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF0: // MOV SP, BA
+                    cpu->registers.SP = reg_BA(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF1: // MOV SP, HL
+                    cpu->registers.SP = reg_HL(*cpu);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF2: // MOV SP, X
+                    cpu->registers.SP = cpu->registers.X;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF3: // MOV SP, Y
+                    cpu->registers.SP = cpu->registers.Y;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF4: //MOV HL, SP
+                    set_HL(cpu, cpu->registers.SP);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF5: // MOV HL, PC
+                    set_HL(cpu, cpu->registers.PC);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF8: // MOV BA, SP
+                    set_BA(cpu, cpu->registers.SP);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xF9: // MOV BA, PC
+                    set_BA(cpu, cpu->registers.PC);
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xFA: // MOV X, SP
+                    cpu->registers.X = cpu->registers.SP;
+                    emu_cycles(&emu, 8);
+                    break;
+                case 0xFE: // MOV Y, SP
+                    cpu->registers.Y = cpu->registers.SP;
+                    emu_cycles(&emu, 8);
+                    break;
+                default:
+                    printf("CF NOT FOUND\n");
+                    break;
             }
             break;
         case 0xBC: { // MOV [#nnnn], BA
@@ -903,8 +1338,78 @@ void cpu_step(Cpu *cpu, Bus bus, Emulator emu) {
             uint8_t nn2 = bus_read(bus, cpu->registers.PC);
             cpu->registers.PC++;
             uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
-            bus_write(bus, nnnn, reg_BA(*cpu));
+            bus_write16(bus, nnnn, reg_BA(*cpu));
             emu_cycles(&emu, 20);
+            break;
+        }
+        case 0xBD: { // MOV [#nnnn], HL
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            bus_write16(bus, nnnn, reg_HL(*cpu));
+            emu_cycles(&emu, 20);
+            break;
+        }
+        case 0xBE: { // MOV [#nnnn], X
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            bus_write16(bus, nnnn, cpu->registers.X);
+            emu_cycles(&emu, 20);
+            break;
+        }
+        case 0xBF: { // MOV [#nnnn], Y
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            bus_write16(bus, nnnn, cpu->registers.Y);
+            emu_cycles(&emu, 20);
+            break;
+        }
+        case 0xC4: { // MOV BA, #nnnn
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            set_BA(cpu, nnnn);
+            emu_cycles(&emu, 12);
+            break;
+        }
+        case 0xC5: { // MOV HL, #nnnn
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            set_HL(cpu, nnnn);
+            emu_cycles(&emu, 12);
+            break;
+        }
+        case 0xC6: { // MOV X, #nnnn
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            cpu->registers.X = nnnn;
+            emu_cycles(&emu, 12);
+            break;
+        }
+        case 0xC7: { // MOV Y, #nnnn
+            uint8_t nn1 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint8_t nn2 = bus_read(bus, cpu->registers.PC);
+            cpu->registers.PC++;
+            uint16_t nnnn = ((uint16_t)nn1 << 8) | nn2;
+            cpu->registers.Y = nnnn;
+            emu_cycles(&emu, 12);
             break;
         }
     }
