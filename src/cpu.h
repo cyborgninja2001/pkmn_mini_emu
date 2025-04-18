@@ -66,7 +66,7 @@ void set_flag_ID(Cpu *cpu, bool v);
 void set_flag_IB(Cpu *cpu, bool v);
 
 void cpu_reset(Cpu *cpu);
-void cpu_step(Cpu *cpu, Bus bus, Emulator emu);
+void cpu_step(Cpu *cpu, Bus bus, Emulator *emu);
 void cpu_debug(Cpu cpu);
 
 #endif
